@@ -10,7 +10,7 @@ import re
 
 app = Flask(__name__)
 
-# Whisper JAX setup
+# Using OpenAI whisper JAX-fine tuned model that is way faster
 API_URL = "https://sanchit-gandhi-whisper-jax.hf.space/"
 client = Client(API_URL)
 
@@ -47,14 +47,11 @@ def manual_transcribe(url):
     yt = YouTube(url, on_progress_callback=on_progress)
     print(f"Downloading audio for: {yt.title}")
     
-    # Get the audio stream and download it
     ys = yt.streams.get_audio_only()
     audio_file = ys.download(filename_suffix=".mp3")  # Save as mp3
     
-    # Transcribe the downloaded audio
     transcription = transcribe_audio(audio_file)
     
-    # Clean up the downloaded file
     os.remove(audio_file)
     
     return transcription
